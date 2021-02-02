@@ -12,7 +12,7 @@ class Joypad extends StatefulWidget {
   JoypadState createState() => JoypadState();
 }
 
-class JoypadState extends State {
+class JoypadState extends State<Joypad> {
   Offset delta = Offset.zero;
 
   void updateDelta(Offset newDelta) {
@@ -79,6 +79,8 @@ class JoypadState extends State {
   }
 
   void onDragEnd(DragEndDetails d) {
-    updateDelta(Offset.zero);
+    setState(() {
+      delta = Offset.zero;
+    });
   }
 }

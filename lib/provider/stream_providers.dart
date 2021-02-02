@@ -7,7 +7,7 @@ import 'package:rxdart/rxdart.dart';
 List<SingleChildWidget> streamProviders = [
   Provider<BehaviorSubject<AllScheduleO>>(
     lazy: false,
-    create: (context) => BehaviorSubject(sync: true),
+    create: (context) => BehaviorSubject<AllScheduleO>(sync: true),
     dispose: (_, stream) => stream.close(),
   ),
   Provider<PublishSubject<LocalStorageUpdate>>(

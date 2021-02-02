@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
+
 class ScheduleO {
-  final String title;
-  final DateTime scheduleTime;
-  final String alarmType;
   final bool isActive;
   final int id;
+  final TimeOfDay timeOfDay;
+  final List<int> selectedDays;
 
-  ScheduleO(this.title, this.scheduleTime, this.alarmType, this.isActive, this.id);
+  ScheduleO({this.timeOfDay, this.selectedDays, this.isActive, this.id});
 
   factory ScheduleO.fromMap(Map<String, dynamic> map){
 

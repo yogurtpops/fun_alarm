@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
 import 'package:fun_alarm/core/view/page/dashboard/dashboard_page.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/ring_alarm_page.dart';
+import 'package:fun_alarm/core/view/page/ringalarm/tank_game_page.dart';
 import 'package:fun_alarm/core/view/page/splash/splash_screen.dart';
 import 'package:fun_alarm/main.dart';
 
-String initialRoute = RouteName.createAlarmPage;
+String initialRoute = RouteName.dashboardPage;
 
 var navigatorKey = GlobalKey<NavigatorState>();
 

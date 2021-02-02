@@ -10,7 +10,7 @@ List<SingleChildWidget> storeProviders = [
   Provider<ScheduleStore>(
       create: (context) => ScheduleStore(
           Provider.of<LocalStorageService>(context, listen: false),
-          Provider.of<Subject<LocalStorageUpdate>>(context, listen: false),
+          Provider.of<PublishSubject<LocalStorageUpdate>>(context, listen: false),
           Provider.of<BehaviorSubject<AllScheduleO>>(context, listen: false)),
       lazy: false,
       dispose: (context, store) => store.dispose()),
