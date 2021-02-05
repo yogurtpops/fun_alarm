@@ -16,6 +16,5 @@ List<SingleChildWidget> serviceProviders = [
   Provider<NotificationService>(
     lazy: false,
     create: (context) => NotificationService()..initialize(),
-    dispose: (context, service) => service.dispose(),
   ),
 ];

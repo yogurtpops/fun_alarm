@@ -4,6 +4,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fun_alarm/core/configs/configs.dart';
 import 'package:fun_alarm/core/observable/scheduleO.dart';
 import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
+import 'package:fun_alarm/core/view/page/ringalarm/ring_alarm_page.dart';
+import 'package:fun_alarm/router/router.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -22,8 +24,8 @@ class NotificationService {
     tz.initializeTimeZones();
   }
 
-  Future<dynamic> onSelectNotification(String name) {
-    // on tap remove notification
+  Future<void> onSelectNotification(String name) {
+    return navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
   }
 
   Future onDidReceiveLocalIosNotification(
@@ -39,12 +41,12 @@ class NotificationService {
             child: Text('Ok'),
             onPressed: () async {
               Navigator.of(context, rootNavigator: true).pop();
-              // await Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-                  // builder: (context) => SecondScreen(payload),
-              //   ),
-              // );
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RingAlarmPage(),
+                ),
+              );
             },
           )
         ],
@@ -53,16 +55,17 @@ class NotificationService {
   }
 
   Future<void> scheduleNotification(ScheduleO scheduleO) async {
-    var androidChannelSpecifics = AndroidNotificationDetails(
+
+    AndroidNotificationDetails androidNotificationChannel = AndroidNotificationDetails(
       Config.notificationChannelId,
       Config.notificationChannelId,
-      "CHANNEL_DESCRIPTION",
+      "this_is_the_only_notification_channel_for_platform_android",
       icon: 'secondary_icon',
       sound: RawResourceAndroidNotificationSound('my_sound'),
       largeIcon: DrawableResourceAndroidBitmap('large_notf_icon'),
       enableLights: true,
-      color: const Color.fromARGB(255, 255, 0, 0),
-      ledColor: const Color.fromARGB(255, 255, 0, 0),
+      color: Colors.black,
+      ledColor: Colors.black,
       ledOnMs: 1000,
       ledOffMs: 500,
       importance: Importance.max,
@@ -73,7 +76,7 @@ class NotificationService {
     );
 
     var platformChannelSpecifics = NotificationDetails(
-      android: androidChannelSpecifics
+      android: androidNotificationChannel
     );
 
     var scheduleNotificationDateTime = getNearestDateTime(TimeOfDay(hour: scheduleO.hour, minute: scheduleO.minute), scheduleO.selectedDays);
@@ -99,9 +102,5 @@ class NotificationService {
 
   cancelNotification(int id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
-  }
-
-  dispose(){
-
   }
 }

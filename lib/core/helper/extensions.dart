@@ -43,17 +43,4 @@ extension TimeDayExtension on TimeOfDay {
     else
       return 0;
   }
-
-  static TimeOfDay fromString(String string) {
-    string = string
-        .replaceAll("(", "")
-        .replaceAll(")", "")
-        .replaceAll("TimeOfDay", "");
-    final h = int.tryParse(string.split(":").first);
-    final min = int.tryParse(string.split(":").last);
-
-    return TimeOfDay(hour: h, minute: min);
-  }
-
-  DateTime get fakeDateTime => DateTime(1, 1, 1, hour, minute);
 }

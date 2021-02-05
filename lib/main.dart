@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:fun_alarm/core/config/theme.dart';
 import 'package:fun_alarm/provider/providers.dart';
 import 'package:fun_alarm/router/router.dart';
 import 'package:provider/provider.dart';

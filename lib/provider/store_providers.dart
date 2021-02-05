@@ -6,7 +6,6 @@ import 'package:provider/single_child_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 List<SingleChildWidget> storeProviders = [
-  // provide stream of observable returned by suitable store
   Provider<ScheduleStore>(
       create: (context) => ScheduleStore(
           Provider.of<LocalStorageService>(context, listen: false),
