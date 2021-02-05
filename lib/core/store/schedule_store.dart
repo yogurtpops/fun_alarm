@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:fun_alarm/core/observable/scheduleO.dart';
 import 'package:fun_alarm/core/service/local_storage_keys.dart';
 import 'package:fun_alarm/core/service/local_storage_service.dart';
+import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ScheduleStore {
@@ -27,6 +29,23 @@ class ScheduleStore {
         _updateObservables();
       }
     });
+  }
+
+  Future<ScheduleO> getIncomingSchedule() async {
+    final createdSchedules = await _localStorageService.getListForKey(LocalStorageKeys.schedule);
+    var incomingSchedule;
+
+    for (final schedule in createdSchedules) {
+      var _schedule = ScheduleO.fromMap(jsonDecode(schedule));
+
+      if (_schedule.isActive && getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays) != null &&
+          (incomingSchedule != null || getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays).isBefore(DateTime.now().add(Duration(days: 1000)))) &&
+            getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays).isBefore(getNearestDateTime(TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute), incomingSchedule.selectedDays))) {
+        incomingSchedule = _schedule;
+      }
+    }
+
+    return incomingSchedule;
   }
 
   Future<void> _updateObservables() async {
@@ -56,6 +75,10 @@ class ScheduleStore {
     return _updateObservables();
   }
 
+  Future<void> getSchedules() async {
+    return _localStorageService.notifyUpdateForKey(LocalStorageUpdate(LocalStorageKeys.schedule));
+  }
+
   Future<void> addSchedule(ScheduleO scheduleO) async {
     var createdSchedules =
         await _localStorageService.getListForKey(LocalStorageKeys.schedule) ??
@@ -75,8 +98,6 @@ class ScheduleStore {
             [];
 
     createdSchedules[createdSchedules.indexWhere((element) => scheduleO.id == ScheduleO.fromMap(jsonDecode(element)).id)] = scheduleO.toString();
-
-    createdSchedules.add(scheduleO.toString());
 
     _localStorageService.saveListForKey(LocalStorageKeys.schedule,
         values: createdSchedules);

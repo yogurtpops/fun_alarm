@@ -4,8 +4,6 @@ import 'package:rxdart/rxdart.dart';
 import 'local_storage_service.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'local_storage_service.dart';
-
 class HiveLocalStorageService extends LocalStorageService {
   Box box;
 
