@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fun_alarm/core/service/hive_storage_service.dart';
 import 'package:fun_alarm/core/service/local_storage_service.dart';
 import 'package:fun_alarm/core/service/notification_service.dart';
@@ -15,6 +16,8 @@ List<SingleChildWidget> serviceProviders = [
   ),
   Provider<NotificationService>(
     lazy: false,
-    create: (context) => NotificationService()..initialize(),
+    create: (context) {
+      return NotificationService()..initialize();
+    }
   ),
 ];

@@ -6,22 +6,21 @@ import 'package:fun_alarm/core/observable/scheduleO.dart';
 import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/ring_alarm_page.dart';
 import 'package:fun_alarm/router/router.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter/services.dart';
 
 class NotificationService {
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  initialize(){
+  initialize() async {
+    NotificationAppLaunchDetails notifLaunch = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
     const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
+      AndroidInitializationSettings('hour_glass');
     final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
-
-    tz.initializeTimeZones();
   }
 
   Future<void> onSelectNotification(String name) {
@@ -60,9 +59,9 @@ class NotificationService {
       Config.notificationChannelId,
       Config.notificationChannelId,
       "this_is_the_only_notification_channel_for_platform_android",
-      icon: 'secondary_icon',
-      sound: RawResourceAndroidNotificationSound('my_sound'),
-      largeIcon: DrawableResourceAndroidBitmap('large_notf_icon'),
+      icon: 'hour_glass',
+      sound: RawResourceAndroidNotificationSound('nightwatcher'),
+      largeIcon: DrawableResourceAndroidBitmap('hour_glass'),
       enableLights: true,
       color: Colors.black,
       ledColor: Colors.black,
@@ -81,14 +80,13 @@ class NotificationService {
 
     var scheduleNotificationDateTime = getNearestDateTime(TimeOfDay(hour: scheduleO.hour, minute: scheduleO.minute), scheduleO.selectedDays);
 
-    return await flutterLocalNotificationsPlugin.zonedSchedule(
-        scheduleO.id,
+    return await flutterLocalNotificationsPlugin.schedule(
+        Config.alarmNotificationId,
         'Alarm',
-        "${TimeOfDay(hour: scheduleO.hour, minute: scheduleO.minute)}",
+        "Its a fun alarm!", //${TimeOfDay(hour: scheduleO.hour, minute: scheduleO.minute)}",
         scheduleNotificationDateTime,
         platformChannelSpecifics,
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
+        androidAllowWhileIdle: true);
   }
 
   Future<List<ActiveNotification>> retrieveActiveNotifications() async {

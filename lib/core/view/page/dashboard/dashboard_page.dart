@@ -43,7 +43,8 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           body:  _allSchedules==null ? Container() : ListView.builder(
-            itemBuilder: (context, index) => Neumorphic(
+            itemBuilder: (context, index) => NeumorphicButton(
+              onPressed: () => navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage),
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               padding: EdgeInsets.all(24),
               style: NeumorphicStyle(

@@ -38,10 +38,14 @@ class ScheduleStore {
     for (final schedule in createdSchedules) {
       var _schedule = ScheduleO.fromMap(jsonDecode(schedule));
 
-      if (_schedule.isActive && getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays) != null &&
-          (incomingSchedule != null || getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays).isBefore(DateTime.now().add(Duration(days: 1000)))) &&
-            getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays).isBefore(getNearestDateTime(TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute), incomingSchedule.selectedDays))) {
-        incomingSchedule = _schedule;
+      if (_schedule.isActive){
+        if (incomingSchedule==null && getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays)
+            .isBefore(DateTime.now().add(Duration(days: 1000)))){
+                incomingSchedule = _schedule;
+        } else if (incomingSchedule!=null && getNearestDateTime(TimeOfDay(hour: _schedule.hour, minute: _schedule.minute), _schedule.selectedDays)
+            .isBefore(getNearestDateTime(TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute), incomingSchedule.selectedDays))){
+                incomingSchedule = _schedule;
+        }
       }
     }
 

@@ -3,6 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fun_alarm/provider/providers.dart';
 import 'package:fun_alarm/router/router.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +11,26 @@ void main() {
     return true;
   };
 
+  Workmanager.initialize(
+      callbackDispatcher,
+      isInDebugMode: true
+  );
+
+  // Periodic task registration
+  Workmanager.registerPeriodicTask(
+    "2",
+    "simplePeriodicTask",
+    frequency: Duration(minutes: 1),
+  );
+
   runApp(FunAlarm());
+}
+
+void callbackDispatcher() {
+    Workmanager.executeTask((task, inputData) {
+
+    return Future.value(true);
+  });
 }
 
 class FunAlarm extends StatelessWidget {
