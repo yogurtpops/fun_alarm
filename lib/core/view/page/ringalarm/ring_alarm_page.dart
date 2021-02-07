@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/rive_animation.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/triangle_painter.dart';
+import 'package:fun_alarm/core/view/page/ringalarm/upside_down_triangle_painter.dart';
 
 class RingAlarmPage extends StatefulWidget {
   @override
@@ -16,10 +17,11 @@ class RingAlarmPage extends StatefulWidget {
 }
 
 class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderStateMixin {
-  GlobalKey<MyRiveAnimationState> alarmAnimationKey = GlobalKey();
 
+  double fillPercentage = 0;
   bool finish = false;
   AnimationController controller;
+  Alignment _alignment = Alignment.topCenter;
 
   @override
   void initState() {
@@ -27,7 +29,18 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
     controller = AnimationController(
         vsync: this
     );
-    WidgetsBinding.instance.addObserver(alarmAnimationKey?.currentState?.startLoop('ringing'));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _alignment=Alignment.bottomCenter));
+  }
+
+  updateHourGlass(){
+    setState(() {
+      if (fillPercentage<1){
+        fillPercentage += 0.05;
+      } else {
+        finish = true;
+      }
+    });
   }
 
   @override
@@ -44,7 +57,7 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
                 "assets/svg/goodmorning.svg",
                 run: finish,
                 duration: new Duration(seconds: 3),
-                controller: controller,
+                // controller: controller,
                 onFinish: () => setState(() {
                   controller.stop();
                 }),
@@ -60,7 +73,8 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomPaint(
-                      painter: TrianglePainter(
+                      painter: UpsideDownTrianglePainter(
+                        percentage: fillPercentage,
                         strokeColor: Colors.blue,
                         strokeWidth: 10,
                         paintingStyle: PaintingStyle.fill,
@@ -68,7 +82,20 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
                       child: Container(
                         margin: EdgeInsets.only(top: 0),
                         height: 145,
-                        width: 150,
+                        width: 145,
+                      ),
+                    ),
+                    CustomPaint(
+                      painter: TrianglePainter(
+                        percentage: fillPercentage,
+                        strokeColor: Colors.blue,
+                        strokeWidth: 10,
+                        paintingStyle: PaintingStyle.fill,
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 0),
+                        height: 145,
+                        width: 145,
                       ),
                     ),
                   ],
@@ -80,11 +107,15 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
           ),
           Positioned(
             bottom: 64,
-            child: Container(
-              // width: 80,
-              // height: 80,
+            child: AnimatedContainer(
+              padding: EdgeInsets.all(10.0),
+              duration: Duration(milliseconds: 300),
+              alignment: _alignment,
+              onEnd: () => setState(() => _alignment==Alignment.topCenter ? _alignment=Alignment.bottomCenter : _alignment=Alignment.topCenter),
+              width: 300,
+              height: 80,
               child: InkWell(
-                onTap: () => setState(()=>finish=!finish),
+                onTap: () => setState(()=>updateHourGlass()),
                 child: Text(
                     "Shake the Hourglass\nto Move It Faster!",
                   style: TextStyle(
@@ -99,5 +130,4 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
       ),
     );
   }
-
 }
