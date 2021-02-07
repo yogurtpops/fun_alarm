@@ -36,10 +36,8 @@ class ScheduleAction {
     if (incomingSchedule != null){
       var activeNotifications = await _notificationService.retrieveActiveNotifications();
       if (activeNotifications?.isNotEmpty){
-        // if (activeNotifications[0].body != TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute)){
           await cancelNotification(Config.alarmNotificationId);
           await _notificationService.scheduleNotification(incomingSchedule);
-        // }
       }
 
       print('next alarm at ${getNearestDateTime(TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute), incomingSchedule.selectedDays)}');

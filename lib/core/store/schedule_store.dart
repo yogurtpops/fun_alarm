@@ -80,7 +80,7 @@ class ScheduleStore {
   }
 
   Future<void> getSchedules() async {
-    return _localStorageService.notifyUpdateForKey(LocalStorageUpdate(LocalStorageKeys.schedule));
+    return _updateObservables();
   }
 
   Future<void> addSchedule(ScheduleO scheduleO) async {

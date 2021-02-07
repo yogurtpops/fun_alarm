@@ -5,12 +5,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fun_alarm/core/action/schedule_action.dart';
 import 'package:fun_alarm/core/helper/extensions.dart';
 import 'package:fun_alarm/core/observable/scheduleO.dart';
-import 'package:fun_alarm/router/router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'analog/clock_hands.dart';
 
 class CreateAlarPage extends StatefulWidget {
+
+  final ScheduleO scheduleO;
+  bool isEdit;
+
+  CreateAlarPage({Key key, this.scheduleO}) : super(key: key) {
+    this.isEdit = scheduleO!=null;
+  }
+
   @override
   State<StatefulWidget> createState() {
     return CreateAlarmPageState();
@@ -24,26 +31,47 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
   List<int> _daysOption = List();
 
   @override
+  void initState() {
+    // setup view for edit
+    if (widget.isEdit){
+      _daysOption = widget.scheduleO.selectedDays;
+      selectedTime = TimeOfDay(hour: widget.scheduleO.hour, minute: widget.scheduleO.minute);
+      selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
-        title: Text("Create"),
+        title: Text(widget.isEdit ? "Edit" : "Create"),
         actions: [
           InkWell(
             onTap: (() {
               if (selectedDatetime!=null){
-                Provider.of<ScheduleAction>(context, listen: false).addSchedule(
-                    ScheduleO(
-                        minute: selectedDatetime.minute,
-                        hour: selectedDatetime.hour,
-                        id: DateTime.now().millisecondsSinceEpoch,
-                        isActive: true,
-                        selectedDays: _daysOption
-                    ));
-                Navigator.of(context).pushNamed(RouteName.dashboardPage);
+                if (widget.isEdit){
+                  Provider.of<ScheduleAction>(context, listen: false).editSchedule(
+                      ScheduleO(
+                          minute: selectedDatetime.minute,
+                          hour: selectedDatetime.hour,
+                          id: widget.scheduleO.id,
+                          isActive: true,
+                          selectedDays: _daysOption
+                      ));
+                } else {
+                  Provider.of<ScheduleAction>(context, listen: false).addSchedule(
+                      ScheduleO(
+                          minute: selectedDatetime.minute,
+                          hour: selectedDatetime.hour,
+                          id: DateTime.now().millisecondsSinceEpoch,
+                          isActive: true,
+                          selectedDays: _daysOption
+                      ));
+                }
+                Navigator.of(context).pop();
               } else {
                 Fluttertoast.showToast(
                     msg: "Choose day for this schedule",
@@ -94,24 +122,28 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
                 children: [
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.monday,
+                      isSelected: _daysOption.contains(DateTime.monday),
                       label: "M", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.monday) : _daysOption.remove(DateTime.monday);
                     selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.tuesday,
+                      isSelected: _daysOption.contains(DateTime.tuesday),
                       label: "T", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.tuesday) : _daysOption.remove(DateTime.tuesday);
                     selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.wednesday,
+                      isSelected: _daysOption.contains(DateTime.wednesday),
                       label: "W", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.wednesday) : _daysOption.remove(DateTime.wednesday);
                     selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.thursday,
+                      isSelected: _daysOption.contains(DateTime.thursday),
                       label: "T", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.thursday) : _daysOption.remove(DateTime.thursday);
                     if (selectedDatetime.weekday==DateTime.thursday){
@@ -120,18 +152,21 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.friday,
+                      isSelected: _daysOption.contains(DateTime.friday),
                       label: "F", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.friday) : _daysOption.remove(DateTime.friday);
                     selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.saturday,
+                      isSelected: _daysOption.contains(DateTime.saturday),
                       label: "S", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.saturday) : _daysOption.remove(DateTime.saturday);
                     selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.sunday,
+                      isSelected: _daysOption.contains(DateTime.sunday),
                       label: "S", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.sunday) : _daysOption.remove(DateTime.sunday);
                     selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
@@ -270,7 +305,7 @@ class DayButtonState extends State<DayButton> {
 
   @override
   void initState() {
-    selected = false;
+    selected = widget.isSelected;
     super.initState();
   }
 
@@ -303,8 +338,9 @@ class DayButton extends StatefulWidget {
   final bool isToday;
   final String label;
   final Function(bool selected) onTap;
+  final bool isSelected;
 
-  const DayButton({Key key, this.label, this.onTap, this.isToday}) : super(key: key);
+  const DayButton({Key key, this.label, this.onTap, this.isToday, this.isSelected:false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
