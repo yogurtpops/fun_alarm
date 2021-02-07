@@ -10,9 +10,8 @@ import 'package:rxdart/rxdart.dart';
 List<SingleChildWidget> serviceProviders = [
   Provider<LocalStorageService>(
     lazy: false,
-    create: (context) => HiveLocalStorageService(Provider.of<PublishSubject<LocalStorageUpdate>>(context, listen: false))
-      ..init(),
-    dispose: (context, service) => service.dispose(),
+    create: (context) => HiveLocalStorageService(Provider.of<PublishSubject<LocalStorageUpdate>>(context, listen: false))..init(),
+    // dispose: (context, service) => service.dispose(),
   ),
   Provider<NotificationService>(
     lazy: false,

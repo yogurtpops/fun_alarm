@@ -22,8 +22,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-      Provider.of<ScheduleAction>(context, listen: false).getSchedules());
+    Provider.of<ScheduleAction>(context, listen: false)?.getSchedules();
   }
 
   @override

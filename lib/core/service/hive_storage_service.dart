@@ -22,7 +22,7 @@ class HiveLocalStorageService extends LocalStorageService {
 
   @override
   Future<List<String>> getListForKey(String key) async {
-    return box.get(key);
+    return await box.get(key);
   }
 
   @override

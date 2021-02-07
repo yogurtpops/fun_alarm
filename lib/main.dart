@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fun_alarm/core/service/local_storage_service.dart';
 import 'package:fun_alarm/provider/providers.dart';
 import 'package:fun_alarm/router/router.dart';
 import 'package:provider/provider.dart';
@@ -11,17 +13,17 @@ void main() {
     return true;
   };
 
-  Workmanager.initialize(
-      callbackDispatcher,
-      isInDebugMode: true
-  );
-
-  // Periodic task registration
-  Workmanager.registerPeriodicTask(
-    "2",
-    "simplePeriodicTask",
-    frequency: Duration(minutes: 1),
-  );
+  // Workmanager.initialize(
+  //     callbackDispatcher,
+  //     isInDebugMode: true
+  // );
+  //
+  // // Periodic task registration
+  // Workmanager.registerPeriodicTask(
+  //   "2",
+  //   "simplePeriodicTask",
+  //   frequency: Duration(minutes: 1),
+  // );
 
   runApp(FunAlarm());
 }

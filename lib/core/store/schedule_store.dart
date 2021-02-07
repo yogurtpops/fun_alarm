@@ -63,6 +63,7 @@ class ScheduleStore {
 
       return o$.add(AllScheduleO(schedules));
     } catch (e) {
+      print('updateobservable find error $e');
       return o$.add(AllScheduleO([]));
     }
   }
