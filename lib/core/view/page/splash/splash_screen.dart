@@ -35,6 +35,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void dispose() {
     t.cancel();
+    super.dispose();
   }
 
   @override
