@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_alarm/core/view/page/createalarm/analog/ticks.dart';
+import 'package:fun_alarm/core/view/page/createalarm/analog/clock_ticks.dart';
 
 class ClockHands extends StatefulWidget {
   final TimeOfDay selectedTime;

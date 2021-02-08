@@ -43,4 +43,17 @@ extension TimeDayExtension on TimeOfDay {
     else
       return 0;
   }
+
+  String toTwelveHourFormat(){
+    int hour = this.hour;
+    bool am = true;
+    if (hour>12){
+      am = false;
+      hour = hour-12;
+    }
+
+    return (hour<=9 ? "0$hour" : "$hour") + ":"
+        + (minute<=9 ? "0$minute" : "$minute")
+      + (am ? " AM" : " PM");
+  }
 }

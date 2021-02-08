@@ -48,7 +48,7 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
-        title: Text(widget.isEdit ? "Edit" : "Create"),
+        title: Text(widget.isEdit ? "Edit" : "Add"),
         actions: [
           InkWell(
             onTap: (() {
@@ -80,7 +80,7 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.grey[300],
                     textColor: Colors.black,
                     fontSize: 16.0
                 );
@@ -208,12 +208,14 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
                       initialTime: selectedTime,
                       context: context,
                     ).then((selectedTime) {
-                      setState(() {
-                        this.selectedTime = selectedTime;
-                        if (selectedDatetime == null || selectedTime.compareTo(TimeOfDay.fromDateTime(selectedDatetime))!=0){
-                          selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
-                        }
-                      });
+                      if (selectedTime!=null){
+                        setState(() {
+                          this.selectedTime = selectedTime;
+                          if (selectedDatetime == null || selectedTime.compareTo(TimeOfDay.fromDateTime(selectedDatetime))!=0){
+                            selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
+                          }
+                        });
+                      }
                     }),
                     drawSurfaceAboveChild: false,
                     style: NeumorphicStyle(
@@ -235,22 +237,25 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
             height: 32,
           ),
           // selectedDatetime != null ?
-          AnimatedOpacity(
+          AnimatedContainer(
             duration: Duration(microseconds: 1000),
-            opacity: selectedDatetime!=null ? 1 : 0,
-            child: Column(
+            // opacity: selectedDatetime!=null ? 1 : 0,
+            child: selectedDatetime==null
+              ? Container(
+              child: Text("Choose day for this schedule"),
+            ) : Column(
               children: [
                 selectedDatetime!=null ? Padding(
                   padding: const EdgeInsets.only(top:8.0, bottom: 16),
-                  child: Text(DateFormat('EEEE, d MMMM yyyy').format(selectedDatetime)),
+                  child: Text(DateFormat('EEEE, d MMMM yyyy').format(selectedDatetime), style: Theme.of(context).textTheme.bodyText2,),
                 ) : Container(),
                 NeumorphicText(
-                    twelvehformat ? selectedTime.format(context) : selectedTime.format(context) ,
+                    twelvehformat ? selectedTime.toTwelveHourFormat() : selectedTime.format(context) ,
                     textStyle: NeumorphicTextStyle(
                         fontSize: 32, letterSpacing: 2, fontWeight: FontWeight.bold )),
                 Padding(
                   padding: const EdgeInsets.only(top:8.0),
-                  child: Text('Indonesia'),
+                  child: Text('Indonesia', style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                 ),
                 Container(
                   height: 32,

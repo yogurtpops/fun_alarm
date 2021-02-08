@@ -1,10 +1,10 @@
-import 'package:drawing_animation/drawing_animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'file:///D:/personal/fun_alarm/lib/core/view/page/ringalarm/animation/animated_text.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/triangle_painter.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/upside_down_triangle_painter.dart';
 import 'package:fun_alarm/router/router.dart';
@@ -83,16 +83,12 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
         },
         child: Center(
           child: Stack(
-            alignment: Alignment.center,
             children: [
               Visibility(
                 visible: finish,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: AnimatedDrawing.svg(
-                    "assets/svg/goodmorning.svg",
-                    controller: controller
-                  ),
+                child: AnimatedSvgText(
+                  controller: controller,
+                  svg: "assets/svg/goodmorning.svg"
                 ),
               ),
               Visibility(
@@ -146,16 +142,18 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
                 visible: !finish,
                 child: Positioned(
                   bottom: 64,
+                  left: 0,
+                  right: 0,
                   child: AnimatedContainer(
                     padding: EdgeInsets.all(10.0),
                     duration: Duration(milliseconds: 300),
                     alignment: _alignment,
                     // this is good but gives me motion sickness :(
                     // onEnd: () => setState(() => _alignment==Alignment.topCenter ? _alignment=Alignment.bottomCenter : _alignment=Alignment.topCenter),
-                    width: 300,
+                    width: 350,
                     height: 80,
                     child: Text(
-                        shakeCount.toString(),//"Shake the Hourglass\nto Move It Faster!",
+                        "Shake the Hourglass\nto Move It Faster!",
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,

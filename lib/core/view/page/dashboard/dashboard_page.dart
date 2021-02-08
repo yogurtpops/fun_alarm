@@ -33,7 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text("Dash"),
+            title: Text("Schedules"),
             actions: [
               InkWell(
                 onTap: () => Navigator.of(context).pushNamed(RouteName.createAlarmPage),
