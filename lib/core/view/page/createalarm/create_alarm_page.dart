@@ -10,12 +10,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'analog/clock_hands.dart';
 
-class CreateAlarPage extends StatefulWidget {
+class CreateAlarmPage extends StatefulWidget {
 
   final ScheduleO scheduleO;
   bool isEdit;
 
-  CreateAlarPage({Key key, this.scheduleO}) : super(key: key) {
+  CreateAlarmPage({Key key, this.scheduleO}) : super(key: key) {
     this.isEdit = scheduleO!=null;
   }
 
@@ -25,7 +25,7 @@ class CreateAlarPage extends StatefulWidget {
   }
 }
 
-class CreateAlarmPageState extends State<CreateAlarPage> {
+class CreateAlarmPageState extends State<CreateAlarmPage> {
   DateTime selectedDatetime = null;
   TimeOfDay selectedTime = TimeOfDay.fromDateTime(DateTime.now());
   bool twelvehformat = true;
@@ -282,7 +282,6 @@ DateTime getNearestDateTime(TimeOfDay time, List<int> _daysOption){
 
   for (int selectedDays in _daysOption){
     int difference = selectedDays-DateTime.now().weekday;
-    print('diff is $difference');
 
     if (difference == 0){
       if (time.compareTo(TimeOfDay.fromDateTime(DateTime.now())) == 1)

@@ -56,4 +56,9 @@ extension TimeDayExtension on TimeOfDay {
         + (minute<=9 ? "0$minute" : "$minute")
       + (am ? " AM" : " PM");
   }
+
+  String print(){
+    return (hour<=9 ? "0$hour" : "$hour") + ":"
+        + (minute<=9 ? "0$minute" : "$minute");
+  }
 }

@@ -8,6 +8,7 @@ import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
 import 'package:fun_alarm/router/router.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:fun_alarm/core/helper/extensions.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -29,8 +30,6 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Consumer<AllScheduleO>(
       builder: (context, _allSchedules, _) {
-        print('schedules... ${_allSchedules?.schedules?.length}');
-
         return Scaffold(
           appBar: AppBar(
             title: Text("Schedules"),
@@ -71,7 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 )
               ],
               child: NeumorphicButton(
-                onPressed: () => navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => CreateAlarPage(scheduleO: _allSchedules?.schedules[index]))),
+                onPressed: () => navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => CreateAlarmPage(scheduleO: _allSchedules?.schedules[index]))),
                 margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 padding: EdgeInsets.all(24),
                 style: NeumorphicStyle(
@@ -81,8 +80,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${ _allSchedules.schedules[index]?.hour}:${ _allSchedules.schedules[index]?.minute}",
-                        style: TextStyle(fontSize: 28, letterSpacing: 2, fontWeight: FontWeight.w400),
+                      Text(TimeOfDay(hour: _allSchedules.schedules[index]?.hour, minute: _allSchedules.schedules[index]?.minute).print(),
+                          style: TextStyle(fontSize: 28, letterSpacing: 2, fontWeight: FontWeight.w400),
                       ),
                       Row(
                         children: [

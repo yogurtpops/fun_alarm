@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'file:///D:/personal/fun_alarm/lib/core/view/page/ringalarm/animation/animated_text.dart';
+import 'package:fun_alarm/core/view/page/ringalarm/animation/animated_text.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/triangle_painter.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/upside_down_triangle_painter.dart';
 import 'package:fun_alarm/router/router.dart';
@@ -33,7 +33,12 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
         duration: Duration(seconds: 5)
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _alignment=Alignment.bottomCenter));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted){
+        setState(() => _alignment=Alignment.bottomCenter);
+      }
+    });
 
     userAccelerometerEvents.listen((UserAccelerometerEvent event) {
       if (event.x > 10 || event.x < -10){
@@ -43,27 +48,31 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
   }
 
   updateHourGlass(){
-    setState(() {
-      if (fillPercentage<1){
-        fillPercentage += 0.05;
-      } else {
-        finish = true;
-        controller.forward().whenComplete(() {
-          controller.stop();
-        });
-      }
-    });
+    if (mounted){
+      setState(() {
+        if (fillPercentage<1){
+          fillPercentage += 0.05;
+        } else {
+          finish = true;
+          controller.forward().whenComplete(() {
+            controller.stop();
+          });
+        }
+      });
+    }
   }
 
   shake(){
-    setState(() {
-      if (shakeCount<5){
-        shakeCount++;
-      } else {
-        shakeCount = 0;
-        updateHourGlass();
-      }
-    });
+    if (mounted){
+      setState(() {
+        if (shakeCount<5){
+          shakeCount++;
+        } else {
+          shakeCount = 0;
+          updateHourGlass();
+        }
+      });
+    }
   }
 
   @override

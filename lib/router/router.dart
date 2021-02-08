@@ -17,7 +17,7 @@ class RouteName {
 
 Map<String, WidgetBuilder> routes = {
   RouteName.dashboardPage: (context) => DashboardPage(),
-  RouteName.createAlarmPage: (context) => CreateAlarPage(),
+  RouteName.createAlarmPage: (context) => CreateAlarmPage(),
   RouteName.ringAlarmPage: (context) => RingAlarmPage(),
   RouteName.splashScreen: (context) => SplashScreen(),
 };

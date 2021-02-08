@@ -15,28 +15,6 @@ class ClockHands extends StatefulWidget {
 }
 
 class _ClockHandState extends State<ClockHands> {
-  Timer _timer;
-  // DateTime dateTime;
-
-  @override
-  void initState() {
-    super.initState();
-    // dateTime = new DateTime.now();
-    // _timer = new Timer.periodic(const Duration(seconds: 1), setTime);
-  }
-
-  void setTime(Timer timer) {
-    setState(() {
-      // dateTime = new DateTime.now();
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return new AspectRatio(
