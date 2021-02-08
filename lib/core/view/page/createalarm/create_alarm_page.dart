@@ -148,9 +148,7 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
                       isSelected: _daysOption.contains(DateTime.thursday),
                       label: "T", onTap: (selected) => setState(() {
                     selected ? _daysOption.add(DateTime.thursday) : _daysOption.remove(DateTime.thursday);
-                    if (selectedDatetime.weekday==DateTime.thursday){
-                      selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
-                    }
+                    selectedDatetime = getNearestDateTime(selectedTime, _daysOption);
                   })),
                   DayButton(
                       isToday: DateTime.now().weekday==DateTime.friday,

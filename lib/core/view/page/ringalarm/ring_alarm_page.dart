@@ -81,7 +81,8 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
             navigatorKey.currentState.pop();
           }
         },
-        child: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
           child: Stack(
             children: [
               Visibility(
@@ -93,49 +94,51 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
               ),
               Visibility(
                 visible: !finish,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top:24),
-                          child: CustomPaint(
-                            painter: UpsideDownTrianglePainter(
-                              percentage: fillPercentage,
-                              strokeColor: Colors.blue,
-                              strokeWidth: 10,
-                              paintingStyle: PaintingStyle.fill,
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.only(top: 0),
-                              height: 125,
-                              width: 145,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom:24),
-                          child: CustomPaint(
-                            painter: TrianglePainter(
-                              percentage: fillPercentage,
-                              strokeColor: Colors.blue,
-                              strokeWidth: 10,
-                              paintingStyle: PaintingStyle.fill,
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.only(top: 0),
-                              height: 125,
-                              width: 145,
+                child: Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top:24),
+                            child: CustomPaint(
+                              painter: UpsideDownTrianglePainter(
+                                percentage: fillPercentage,
+                                strokeColor: Colors.blue,
+                                strokeWidth: 10,
+                                paintingStyle: PaintingStyle.fill,
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.only(top: 0),
+                                height: 125,
+                                width: 145,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                        child: SvgPicture.asset("assets/svg/hourglass.svg")),
-                  ],
+                          Padding(
+                            padding: const EdgeInsets.only(bottom:24),
+                            child: CustomPaint(
+                              painter: TrianglePainter(
+                                percentage: fillPercentage,
+                                strokeColor: Colors.blue,
+                                strokeWidth: 10,
+                                paintingStyle: PaintingStyle.fill,
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.only(top: 0),
+                                height: 125,
+                                width: 145,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                          child: SvgPicture.asset("assets/svg/hourglass.svg")),
+                    ],
+                  ),
                 ),
               ),
               Visibility(
@@ -150,7 +153,6 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
                     alignment: _alignment,
                     // this is good but gives me motion sickness :(
                     // onEnd: () => setState(() => _alignment==Alignment.topCenter ? _alignment=Alignment.bottomCenter : _alignment=Alignment.topCenter),
-                    width: 350,
                     height: 80,
                     child: Text(
                         "Shake the Hourglass\nto Move It Faster!",
