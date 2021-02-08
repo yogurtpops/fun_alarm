@@ -20,8 +20,6 @@ class NotificationService {
   }
 
   Future<dynamic> onSelectNotification(String name) {
-    print('onselectnotif $name');
-
     switch(name){
       default: break;
     }
@@ -62,9 +60,9 @@ class NotificationService {
         platformChannelSpecifics);
   }
 
-  Future<void> scheduleNotification(DateTime scheduleNotificationDateTime, String task, {Map<String, dynamic> inputData}) async {
+  Future<void> scheduleWorkmanagerPendingNotification(DateTime notificationScheduleDateTime, String task, {Map<String, dynamic> inputData}) async {
     _backgroundService.schedulePendingTask(
-        scheduleNotificationDateTime,
+        notificationScheduleDateTime,
         task,
         input: inputData
     );

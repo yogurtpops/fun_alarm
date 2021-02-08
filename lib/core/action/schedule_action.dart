@@ -37,14 +37,13 @@ class ScheduleAction {
     if (incomingSchedule != null){
       var incomingDateTime = getNearestDateTime(TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute), incomingSchedule.selectedDays);
 
-      /// this should override older notif if exist
-      await _notificationService.scheduleNotification(
+      await _notificationService.scheduleWorkmanagerPendingNotification(
         incomingDateTime,
-        BackgroundTask.pending_notification,
+        BackgroundTask.alarm_notification,
         inputData: {
-            'time' : '${incomingDateTime.hour}:${incomingDateTime.minute}'
-        }
-      );
+          'time' : '${incomingDateTime.hour}:${incomingDateTime.minute}'
+        });
+
     } else {
       await cancelNotification(Config.alarmNotificationId);
     }

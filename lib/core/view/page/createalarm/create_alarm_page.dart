@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'analog/clock_hands.dart';
 
 class CreateAlarmPage extends StatefulWidget {
-
   final ScheduleO scheduleO;
   bool isEdit;
 
@@ -25,14 +24,13 @@ class CreateAlarmPage extends StatefulWidget {
 }
 
 class CreateAlarmPageState extends State<CreateAlarmPage> {
-  DateTime selectedDatetime = null;
+  DateTime selectedDatetime;
   TimeOfDay selectedTime = TimeOfDay.fromDateTime(DateTime.now());
   bool twelvehformat = true;
   List<int> _daysOption = List();
 
   @override
   void initState() {
-    // setup view for edit
     if (widget.isEdit){
       _daysOption = widget.scheduleO.selectedDays;
       selectedTime = TimeOfDay(hour: widget.scheduleO.hour, minute: widget.scheduleO.minute);
@@ -267,7 +265,6 @@ class CreateAlarmPageState extends State<CreateAlarmPage> {
       ),
     );
   }
-
 }
 
 DateTime getNearestDateTime(TimeOfDay time, List<int> _daysOption){

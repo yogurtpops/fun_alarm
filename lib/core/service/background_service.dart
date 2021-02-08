@@ -17,7 +17,7 @@ class BackgroundService {
       DateTime.now().toString(),
       task,
       initialDelay: Duration(minutes: minuteDelay),
-      inputData: input ?? null
+      inputData: input
     );
   }
 }
@@ -25,7 +25,7 @@ class BackgroundService {
 void callbackDispatcher() {
   Workmanager.executeTask((task, args) {
     switch (task) {
-      case BackgroundTask.pending_notification:
+      case BackgroundTask.alarm_notification:
         NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
         navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
         break;
@@ -40,5 +40,5 @@ void callbackDispatcher() {
 
 
 class BackgroundTask {
-  static const String pending_notification = "pendingNotification";
+  static const String alarm_notification = "alarmNotification";
 }
