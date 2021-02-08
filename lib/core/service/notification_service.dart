@@ -2,60 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fun_alarm/core/configs/configs.dart';
-import 'package:fun_alarm/core/observable/scheduleO.dart';
-import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
-import 'package:fun_alarm/core/view/page/ringalarm/ring_alarm_page.dart';
-import 'package:fun_alarm/router/router.dart';
-import 'package:flutter/services.dart';
+import 'package:fun_alarm/core/service/background_service.dart';
 
 class NotificationService {
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final BackgroundService _backgroundService;
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  NotificationService(this._backgroundService);
 
   initialize() async {
-    NotificationAppLaunchDetails notifLaunch = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
-    const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('hour_glass');
-    final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('hour_glass');
+    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
-  Future<void> onSelectNotification(String name) {
-    return navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
+  Future<dynamic> onSelectNotification(String name) {
+    print('onselectnotif $name');
+
+    switch(name){
+      default: break;
+    }
   }
 
   Future onDidReceiveLocalIosNotification(
       int id, String title, String body, String payload, BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: Text(title),
-        content: Text(body),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text('Ok'),
-            onPressed: () async {
-              Navigator.of(context, rootNavigator: true).pop();
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RingAlarmPage(),
-                ),
-              );
-            },
-          )
-        ],
-      ),
-    );
   }
 
-  Future<void> scheduleNotification(ScheduleO scheduleO) async {
-
-    AndroidNotificationDetails androidNotificationChannel = AndroidNotificationDetails(
+  static AndroidNotificationDetails androidNotificationChannel = AndroidNotificationDetails(
       Config.notificationChannelId,
       Config.notificationChannelId,
       "this_is_the_only_notification_channel_for_platform_android",
@@ -72,21 +48,26 @@ class NotificationService {
       playSound: true,
       timeoutAfter: 5000,
       styleInformation: DefaultStyleInformation(true, true),
-    );
+  );
 
-    var platformChannelSpecifics = NotificationDetails(
+  static var platformChannelSpecifics = NotificationDetails(
       android: androidNotificationChannel
-    );
+  );
 
-    var scheduleNotificationDateTime = getNearestDateTime(TimeOfDay(hour: scheduleO.hour, minute: scheduleO.minute), scheduleO.selectedDays);
+  static void showNotification({@required int id, @required String title, @required String body}) async {
+    return await flutterLocalNotificationsPlugin.show(
+        id,
+        title,
+        body,
+        platformChannelSpecifics);
+  }
 
-    return await flutterLocalNotificationsPlugin.schedule(
-        Config.alarmNotificationId,
-        'Alarm',
-        "Its a fun alarm!", //${TimeOfDay(hour: scheduleO.hour, minute: scheduleO.minute)}",
+  Future<void> scheduleNotification(DateTime scheduleNotificationDateTime, String task, {Map<String, dynamic> inputData}) async {
+    _backgroundService.schedulePendingTask(
         scheduleNotificationDateTime,
-        platformChannelSpecifics,
-        androidAllowWhileIdle: true);
+        task,
+        input: inputData
+    );
   }
 
   Future<List<ActiveNotification>> retrieveActiveNotifications() async {
