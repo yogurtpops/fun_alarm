@@ -29,7 +29,8 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
   void initState() {
     super.initState();
     controller = AnimationController(
-        vsync: this
+        vsync: this,
+        duration: Duration(seconds: 5)
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _alignment=Alignment.bottomCenter));
@@ -47,6 +48,9 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
         fillPercentage += 0.05;
       } else {
         finish = true;
+        controller.forward().whenComplete(() {
+          controller.stop();
+        });
       }
     });
   }
@@ -63,6 +67,12 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: InkWell(
@@ -71,88 +81,91 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
             navigatorKey.currentState.pop();
           }
         },
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Visibility(
-              visible: finish,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: AnimatedDrawing.svg(
-                  "assets/svg/goodmorning.svg",
-                  run: finish,
-                  duration: new Duration(seconds: 3),
-                  // controller: controller,
-                  onFinish: () => setState(() {
-                    controller.stop();
-                  }),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: !finish,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomPaint(
-                        painter: UpsideDownTrianglePainter(
-                          percentage: fillPercentage,
-                          strokeColor: Colors.blue,
-                          strokeWidth: 10,
-                          paintingStyle: PaintingStyle.fill,
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(top: 0),
-                          height: 145,
-                          width: 145,
-                        ),
-                      ),
-                      CustomPaint(
-                        painter: TrianglePainter(
-                          percentage: fillPercentage,
-                          strokeColor: Colors.blue,
-                          strokeWidth: 10,
-                          paintingStyle: PaintingStyle.fill,
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(top: 0),
-                          height: 145,
-                          width: 145,
-                        ),
-                      ),
-                    ],
+        child: Center(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Visibility(
+                visible: finish,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: AnimatedDrawing.svg(
+                    "assets/svg/goodmorning.svg",
+                    controller: controller
                   ),
-                  Container(
-                      child: SvgPicture.asset("assets/svg/hourglass.svg")),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: !finish,
-              child: Positioned(
-                bottom: 64,
-                child: AnimatedContainer(
-                  padding: EdgeInsets.all(10.0),
-                  duration: Duration(milliseconds: 300),
-                  alignment: _alignment,
-                  // this is good but gives me motion sickness :(
-                  // onEnd: () => setState(() => _alignment==Alignment.topCenter ? _alignment=Alignment.bottomCenter : _alignment=Alignment.topCenter),
-                  width: 300,
-                  height: 80,
-                  child: Text(
-                      shakeCount.toString(),//"Shake the Hourglass\nto Move It Faster!",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20
-                    )),
                 ),
               ),
-            )
-          ],
+              Visibility(
+                visible: !finish,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top:24),
+                          child: CustomPaint(
+                            painter: UpsideDownTrianglePainter(
+                              percentage: fillPercentage,
+                              strokeColor: Colors.blue,
+                              strokeWidth: 10,
+                              paintingStyle: PaintingStyle.fill,
+                            ),
+                            child: Container(
+                              margin: EdgeInsets.only(top: 0),
+                              height: 125,
+                              width: 145,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom:24),
+                          child: CustomPaint(
+                            painter: TrianglePainter(
+                              percentage: fillPercentage,
+                              strokeColor: Colors.blue,
+                              strokeWidth: 10,
+                              paintingStyle: PaintingStyle.fill,
+                            ),
+                            child: Container(
+                              margin: EdgeInsets.only(top: 0),
+                              height: 125,
+                              width: 145,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                        child: SvgPicture.asset("assets/svg/hourglass.svg")),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: !finish,
+                child: Positioned(
+                  bottom: 64,
+                  child: AnimatedContainer(
+                    padding: EdgeInsets.all(10.0),
+                    duration: Duration(milliseconds: 300),
+                    alignment: _alignment,
+                    // this is good but gives me motion sickness :(
+                    // onEnd: () => setState(() => _alignment==Alignment.topCenter ? _alignment=Alignment.bottomCenter : _alignment=Alignment.topCenter),
+                    width: 300,
+                    height: 80,
+                    child: Text(
+                        shakeCount.toString(),//"Shake the Hourglass\nto Move It Faster!",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20
+                      )),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

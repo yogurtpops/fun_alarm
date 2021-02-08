@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fun_alarm/core/action/schedule_action.dart';
 import 'package:fun_alarm/core/helper/extensions.dart';
 import 'package:fun_alarm/core/observable/scheduleO.dart';
+import 'package:fun_alarm/router/router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'analog/clock_hands.dart';
@@ -71,7 +72,8 @@ class CreateAlarmPageState extends State<CreateAlarPage> {
                           selectedDays: _daysOption
                       ));
                 }
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
               } else {
                 Fluttertoast.showToast(
                     msg: "Choose day for this schedule",
