@@ -37,12 +37,19 @@ class ScheduleAction {
     if (incomingSchedule != null){
       var incomingDateTime = getNearestDateTime(TimeOfDay(hour: incomingSchedule.hour, minute: incomingSchedule.minute), incomingSchedule.selectedDays);
 
-      await _notificationService.scheduleWorkmanagerPendingNotification(
-        incomingDateTime,
-        BackgroundTask.alarm_notification,
-        inputData: {
-          'time' : '${incomingDateTime.hour}:${incomingDateTime.minute}'
-        });
+      // await _notificationService.scheduleWorkmanagerPendingNotification(
+      //   incomingDateTime,
+      //   BackgroundTask.alarm_notification,
+      //   inputData: {
+      //     'time' : '${incomingDateTime.hour}:${incomingDateTime.minute}'
+      //   });
+
+      await _notificationService.scheduleAndroidAlarmManagerNotification(
+          incomingDateTime,
+          BackgroundTask.alarm_notification,
+          inputData: {
+            'time' : '${incomingDateTime.hour}:${incomingDateTime.minute}'
+          });
 
     } else {
       await cancelNotification(Config.alarmNotificationId);

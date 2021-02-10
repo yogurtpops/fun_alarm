@@ -44,6 +44,11 @@ void callbackDispatcher() {
   });
 }
 
+void callbackAndroidAlarmManager() {
+  navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
+  NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
+}
+
 
 class BackgroundTask {
   static const String alarm_notification = "alarmNotification";

@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -16,6 +17,7 @@ class NotificationService {
 
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('hour_glass');
     final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    await AndroidAlarmManager.initialize();
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
@@ -71,6 +73,10 @@ class NotificationService {
         task,
         input: inputData
     );
+  }
+
+  Future<void> scheduleAndroidAlarmManagerNotification(DateTime notificationScheduleDateTime, String task, {Map<String, dynamic> inputData}) async {
+    AndroidAlarmManager.oneShotAt(notificationScheduleDateTime, Config.alarmNotificationId, callbackAndroidAlarmManager);
   }
 
   Future<List<ActiveNotification>> retrieveActiveNotifications() async {
