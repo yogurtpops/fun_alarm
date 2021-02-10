@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:sensors/sensors.dart';
 
 class RingAlarmPage extends StatefulWidget {
+  const RingAlarmPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return RingAlarmPageState();
@@ -26,6 +28,7 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
   bool finish = false;
   AnimationController controller;
   Alignment _alignment = Alignment.topCenter;
+  bool isAmTimeAlarm = true;
 
   @override
   void initState() {
@@ -47,6 +50,10 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
         shake();
       }
     });
+
+    if (DateTime.now().hour > 12) {
+      isAmTimeAlarm = false;
+    }
   }
 
   turnOffAlarm(){
@@ -55,7 +62,7 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
       controller.stop();
     });
 
-    Provider.of<ScheduleAction>(context).updateScheduledNotification();
+    Provider.of<ScheduleAction>(context, listen: false).updateScheduledNotification();
   }
 
   updateHourGlass(){
@@ -106,7 +113,7 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
                 visible: finish,
                 child: AnimatedSvgText(
                   controller: controller,
-                  svg: "assets/svg/goodmorning.svg"
+                  svg: isAmTimeAlarm ? "assets/svg/greetings_morning.svg" : "assets/svg/greetings_night.svg"
                 ),
               ),
               Visibility(

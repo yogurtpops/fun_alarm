@@ -50,7 +50,7 @@ class NotificationService {
       Config.notificationChannelId,
       "this_is_the_only_notification_channel_for_platform_android",
       icon: 'hour_glass',
-      sound: RawResourceAndroidNotificationSound('nightwatcher'),
+      sound: RawResourceAndroidNotificationSound('la_cucaracha'),
       largeIcon: DrawableResourceAndroidBitmap('hour_glass'),
       enableLights: true,
       color: Colors.black,
