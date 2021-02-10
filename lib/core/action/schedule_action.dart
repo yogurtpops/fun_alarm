@@ -18,20 +18,20 @@ class ScheduleAction {
 
   Future<void> addSchedule(ScheduleO scheduleO) async {
     await _scheduleStore.addSchedule(scheduleO);
-    await scheduleNotification();
+    await updateScheduledNotification();
   }
 
   Future<void> editSchedule(ScheduleO updatedScheduleO) async {
     await _scheduleStore.editSchedule(updatedScheduleO);
-    await scheduleNotification();
+    await updateScheduledNotification();
   }
 
   Future<void> removeSchedule(ScheduleO scheduleO) async {
     await _scheduleStore.removeSchedule(scheduleO);
-    await scheduleNotification();
+    await updateScheduledNotification();
   }
 
-  Future<void> scheduleNotification() async {
+  Future<void> updateScheduledNotification() async {
     var incomingSchedule = await _scheduleStore.getIncomingSchedule();
 
     if (incomingSchedule != null){

@@ -13,7 +13,6 @@ class AnimatedSvgText extends StatefulWidget {
   State<StatefulWidget> createState() {
     return AnimatedSvgTextState();
   }
-
 }
 
 class AnimatedSvgTextState extends State<AnimatedSvgText> {
@@ -26,25 +25,5 @@ class AnimatedSvgTextState extends State<AnimatedSvgText> {
           controller: widget.controller
       ),
     );
-  }
-}
-
-class AnimatedText extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return AnimatedTextState();
-  }
-}
-
-class AnimatedTextState extends State<AnimatedText> {
-  @override
-  void initState() {
-    TextSpan span = new TextSpan(style: new TextStyle(color: Colors.blue[800]), text: "name");
-    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fun_alarm/core/configs/configs.dart';
 import 'package:fun_alarm/core/service/background_service.dart';
+import 'package:fun_alarm/router/router.dart';
 
 class NotificationService {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -20,13 +21,17 @@ class NotificationService {
   }
 
   Future<dynamic> onSelectNotification(String name) {
+    print('onselect $name');
     switch(name){
+      case('Alarm'):
+        navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
+        break;
       default: break;
     }
   }
 
-  Future onDidReceiveLocalIosNotification(
-      int id, String title, String body, String payload, BuildContext context) async {
+  Future onDidReceiveLocalIosNotification(int id, String title, String body, String payload, BuildContext context) async {
+
   }
 
   static AndroidNotificationDetails androidNotificationChannel = AndroidNotificationDetails(
@@ -44,7 +49,7 @@ class NotificationService {
       importance: Importance.max,
       priority: Priority.max,
       playSound: true,
-      timeoutAfter: 5000,
+      ongoing: true,
       styleInformation: DefaultStyleInformation(true, true),
   );
 
@@ -78,6 +83,7 @@ class NotificationService {
   }
 
   cancelNotification(int id) async {
+    _backgroundService.cancelAll();
     await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

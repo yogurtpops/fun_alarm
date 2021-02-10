@@ -4,10 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fun_alarm/core/action/schedule_action.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/animation/animated_text.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/triangle_painter.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/upside_down_triangle_painter.dart';
 import 'package:fun_alarm/router/router.dart';
+import 'package:provider/provider.dart';
 import 'package:sensors/sensors.dart';
 
 class RingAlarmPage extends StatefulWidget {
@@ -47,16 +49,22 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
     });
   }
 
+  turnOffAlarm(){
+    finish = true;
+    controller.forward().whenComplete(() {
+      controller.stop();
+    });
+
+    Provider.of<ScheduleAction>(context).updateScheduledNotification();
+  }
+
   updateHourGlass(){
     if (mounted){
       setState(() {
         if (fillPercentage<1){
           fillPercentage += 0.05;
         } else {
-          finish = true;
-          controller.forward().whenComplete(() {
-            controller.stop();
-          });
+          turnOffAlarm();
         }
       });
     }

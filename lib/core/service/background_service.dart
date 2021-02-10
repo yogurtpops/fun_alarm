@@ -17,8 +17,14 @@ class BackgroundService {
       DateTime.now().toString(),
       task,
       initialDelay: Duration(minutes: minuteDelay),
-      inputData: input
+      inputData: input,
+      backoffPolicy: BackoffPolicy.linear,
+      backoffPolicyDelay: Duration(seconds: 2)
     );
+  }
+
+  cancelAll(){
+    Workmanager.cancelAll();
   }
 }
 
@@ -26,8 +32,8 @@ void callbackDispatcher() {
   Workmanager.executeTask((task, args) {
     switch (task) {
       case BackgroundTask.alarm_notification:
-        NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
         navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
+        NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
         break;
       case Workmanager.iOSBackgroundTask:
         print("iOS background fetch delegate ran");

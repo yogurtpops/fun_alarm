@@ -20,7 +20,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    t = Timer.periodic(new Duration(seconds: 1), (timer) {
+    t = Timer.periodic(new Duration(milliseconds: 500), (timer) {
       if (fillPercentage<1){
         setState(() {
           fillPercentage+=.2;
@@ -28,9 +28,9 @@ class SplashScreenState extends State<SplashScreen> {
       } else {
         navigatorKey.currentState.pushReplacementNamed(RouteName.dashboardPage);
       }
+      return;
     });
   }
-
 
   @override
   void dispose() {
@@ -91,5 +91,4 @@ class SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-
 }
