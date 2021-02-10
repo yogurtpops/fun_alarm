@@ -16,19 +16,20 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
-
   double fillPercentage = 0;
   Timer t;
 
   @override
   void initState() {
+    super.initState();
     t = Timer.periodic(new Duration(milliseconds: 200), (timer) async {
       if (fillPercentage<1){
         setState(() {
           fillPercentage+=.2;
         });
       } else {
-        String notifRouteName = await Provider.of<NotificationService>(context, listen: false).getAppLaunchDetails();
+        t.cancel();
+        String notifRouteName = await Provider.of<NotificationService>(context, listen: false).getNotifRouteName();
         if (notifRouteName!=null){
           navigatorKey.currentState.pushReplacementNamed(notifRouteName);
         } else {
@@ -41,7 +42,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    t.cancel();
+    t?.cancel();
     super.dispose();
   }
 
@@ -90,8 +91,7 @@ class SplashScreenState extends State<SplashScreen> {
                   ),
                 ],
               ),
-              Container(
-                  child: SvgPicture.asset("assets/svg/hourglass.svg")),
+              Container(child: SvgPicture.asset("assets/svg/hourglass.svg")),
             ],
           ),
         ),

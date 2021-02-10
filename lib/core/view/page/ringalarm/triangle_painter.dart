@@ -36,6 +36,7 @@ class TrianglePainter extends CustomPainter {
   bool shouldRepaint(TrianglePainter oldDelegate) {
     return oldDelegate.strokeColor != strokeColor ||
         oldDelegate.paintingStyle != paintingStyle ||
-        oldDelegate.strokeWidth != strokeWidth;
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.percentage != percentage;
   }
 }

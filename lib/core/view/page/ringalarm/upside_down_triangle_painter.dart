@@ -35,6 +35,7 @@ class UpsideDownTrianglePainter extends CustomPainter {
   bool shouldRepaint(UpsideDownTrianglePainter oldDelegate) {
     return oldDelegate.strokeColor != strokeColor ||
         oldDelegate.paintingStyle != paintingStyle ||
-        oldDelegate.strokeWidth != strokeWidth;
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.percentage != percentage;
   }
 }

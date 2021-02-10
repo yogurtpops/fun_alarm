@@ -20,20 +20,16 @@ class NotificationService {
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
-  Future<String> getAppLaunchDetails() async {
+  Future<String> getNotifRouteName() async {
     NotificationAppLaunchDetails launchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
     if (launchDetails.payload!=null){
       if (launchDetails.payload=='Alarm'){
-        // initialRoute = RouteName.ringAlarmPage;
-
-        // RouteName.updateInitialRoute(RouteName.ringAlarmPage);
-
-        // navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
-
         return RouteName.ringAlarmPage;
       }
     }
+
+    return null;
   }
 
   Future<dynamic> onSelectNotification(String name) {

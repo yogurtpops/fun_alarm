@@ -201,6 +201,12 @@ class CreateAlarmPageState extends State<CreateAlarmPage> {
                     onPressed: () => showTimePicker(
                       initialTime: selectedTime,
                       context: context,
+                      builder: (BuildContext context, Widget child) {
+                        return MediaQuery(
+                          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+                          child: child,
+                        );
+                      },
                     ).then((selectedTime) {
                       if (selectedTime!=null){
                         setState(() {
@@ -243,13 +249,10 @@ class CreateAlarmPageState extends State<CreateAlarmPage> {
                   padding: const EdgeInsets.only(top:8.0, bottom: 16),
                   child: Text(DateFormat('EEEE, d MMMM yyyy').format(selectedDatetime), style: Theme.of(context).textTheme.bodyText2,),
                 ) : Container(),
-                NeumorphicText(
-                    twelvehformat ? selectedTime.toTwelveHourFormat() : selectedTime.format(context) ,
-                    textStyle: NeumorphicTextStyle(
-                        fontSize: 32, letterSpacing: 2, fontWeight: FontWeight.bold )),
-                Padding(
-                  padding: const EdgeInsets.only(top:8.0),
-                  child: Text('Indonesia', style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                Text(twelvehformat ? selectedTime.toTwelveHourFormat() : selectedTime.format(context),
+                  style: TextStyle(
+                      fontSize: 32, letterSpacing: 2, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor
+                  ),
                 ),
                 Container(
                   height: 32,

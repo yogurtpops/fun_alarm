@@ -35,7 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
             title: Text("Schedules"),
             actions: [
               InkWell(
-                onTap: () => Navigator.of(context).pushNamed(RouteName.createAlarmPage),
+                onTap: () => navigatorKey.currentState.pushReplacementNamed(RouteName.splashScreen), //Navigator.of(context).pushNamed(RouteName.createAlarmPage),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Icon(Icons.add),
