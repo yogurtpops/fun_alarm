@@ -45,7 +45,6 @@ void callbackDispatcher() {
 }
 
 void callbackAndroidAlarmManager() {
-  navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
   NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
 }
 
