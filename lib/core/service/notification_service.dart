@@ -13,8 +13,6 @@ class NotificationService {
   NotificationService(this._backgroundService);
 
   initialize() async {
-    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('hour_glass');
     final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
     await AndroidAlarmManager.initialize();
@@ -22,11 +20,26 @@ class NotificationService {
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
+  Future<String> getAppLaunchDetails() async {
+    NotificationAppLaunchDetails launchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+    if (launchDetails.payload!=null){
+      if (launchDetails.payload=='Alarm'){
+        // initialRoute = RouteName.ringAlarmPage;
+
+        // RouteName.updateInitialRoute(RouteName.ringAlarmPage);
+
+        // navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
+
+        return RouteName.ringAlarmPage;
+      }
+    }
+  }
+
   Future<dynamic> onSelectNotification(String name) {
-    print('onselect $name');
     switch(name){
       case('Alarm'):
-        navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage);
+        Future.delayed(Duration(milliseconds: 1000), () => navigatorKey.currentState.pushNamed(RouteName.ringAlarmPage));
         break;
       default: break;
     }
@@ -64,7 +77,9 @@ class NotificationService {
         id,
         title,
         body,
-        platformChannelSpecifics);
+        platformChannelSpecifics,
+        payload: title
+    );
   }
 
   Future<void> scheduleWorkmanagerPendingNotification(DateTime notificationScheduleDateTime, String task, {Map<String, dynamic> inputData}) async {

@@ -23,7 +23,7 @@ class FunAlarm extends StatelessWidget {
       builder: (context, snapshot) {
         return MaterialApp(
           routes: routes,
-          initialRoute: initialRoute,
+          initialRoute: RouteName.initialRoute,
           navigatorKey: navigatorKey,
           theme: ThemeLight
         );

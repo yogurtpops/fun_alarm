@@ -4,8 +4,6 @@ import 'package:fun_alarm/core/view/page/dashboard/dashboard_page.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/ring_alarm_page.dart';
 import 'package:fun_alarm/core/view/page/splash/splash_screen.dart';
 
-String initialRoute = RouteName.splashScreen;
-
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class RouteName {
@@ -13,6 +11,11 @@ class RouteName {
   static String dashboardPage = "dashboardPage";
   static String createAlarmPage = "createAlarmPage";
   static String ringAlarmPage = "ringAlarmPage";
+  static String initialRoute = RouteName.splashScreen;
+
+  static updateInitialRoute(String newRoute){
+    initialRoute = newRoute;
+  }
 }
 
 Map<String, WidgetBuilder> routes = {

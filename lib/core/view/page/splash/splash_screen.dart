@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fun_alarm/core/service/notification_service.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/triangle_painter.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/upside_down_triangle_painter.dart';
 import 'package:fun_alarm/router/router.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -20,13 +22,18 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    t = Timer.periodic(new Duration(milliseconds: 500), (timer) {
+    t = Timer.periodic(new Duration(milliseconds: 200), (timer) async {
       if (fillPercentage<1){
         setState(() {
           fillPercentage+=.2;
         });
       } else {
-        navigatorKey.currentState.pushReplacementNamed(RouteName.dashboardPage);
+        String notifRouteName = await Provider.of<NotificationService>(context, listen: false).getAppLaunchDetails();
+        if (notifRouteName!=null){
+          navigatorKey.currentState.pushReplacementNamed(notifRouteName);
+        } else {
+          navigatorKey.currentState.pushReplacementNamed(RouteName.dashboardPage);
+        }
       }
       return;
     });
