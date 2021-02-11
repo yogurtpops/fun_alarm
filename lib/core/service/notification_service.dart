@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,8 +66,11 @@ class NotificationService {
       android: androidNotificationChannel
   );
 
-  void turnOffPersistentAlarmSound(){
-    FlutterRingtonePlayer.stop();
+
+  void turnOffPersistentAlarmSound() async {
+    final SendPort mainToIsolateStream = IsolateNameServer.lookupPortByName('callbackIsolateAndroidAlarmManager');
+    mainToIsolateStream.send('turnoff_alarm');
+    IsolateNameServer.removePortNameMapping('turnoff_alarm');
   }
 
   static void showNotification({@required int id, @required String title, @required String body}) async {
@@ -86,7 +92,7 @@ class NotificationService {
   }
 
   Future<void> scheduleAndroidAlarmManagerNotification(DateTime notificationScheduleDateTime, String task, {Map<String, dynamic> inputData}) async {
-    AndroidAlarmManager.oneShotAt(notificationScheduleDateTime, Config.alarmNotificationId, callbackAndroidAlarmManager);
+    AndroidAlarmManager.oneShotAt(notificationScheduleDateTime, Config.alarmNotificationId, callbackIsolateAndroidAlarmManager);
   }
 
   Future<List<ActiveNotification>> retrieveActiveNotifications() async {
@@ -101,6 +107,8 @@ class NotificationService {
   cancelNotification(int id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
   }
+
+
 }
 
 void callbackAndroidAlarmManager() {
@@ -109,4 +117,16 @@ void callbackAndroidAlarmManager() {
 
 class BackgroundTask {
   static const String alarm_notification = "alarmNotification";
+}
+
+void callbackIsolateAndroidAlarmManager() {
+  NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
+
+  ReceivePort mainToIsolateStream = ReceivePort();
+  IsolateNameServer.registerPortWithName(mainToIsolateStream.sendPort, 'callbackIsolateAndroidAlarmManager');
+  mainToIsolateStream.listen((data) {
+    if (data=='turnoff_alarm'){
+      FlutterRingtonePlayer.stop();
+    }
+  });
 }
