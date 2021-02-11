@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fun_alarm/core/action/schedule_action.dart';
+import 'package:fun_alarm/core/service/notification_service.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/animation/animated_text.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/triangle_painter.dart';
 import 'package:fun_alarm/core/view/page/ringalarm/upside_down_triangle_painter.dart';
@@ -56,12 +57,13 @@ class RingAlarmPageState extends State<RingAlarmPage> with SingleTickerProviderS
     }
   }
 
-  turnOffAlarm(){
+  turnOffAlarm() async {
     finish = true;
     controller.forward().whenComplete(() {
       controller.stop();
     });
 
+    Provider.of<NotificationService>(context, listen: false).turnOffPersistentAlarmSound();
     Provider.of<ScheduleAction>(context, listen: false).updateScheduledNotification();
   }
 

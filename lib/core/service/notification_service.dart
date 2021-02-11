@@ -2,15 +2,12 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:fun_alarm/core/configs/configs.dart';
-import 'package:fun_alarm/core/service/background_service.dart';
 import 'package:fun_alarm/router/router.dart';
 
 class NotificationService {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final BackgroundService _backgroundService;
-
-  NotificationService(this._backgroundService);
 
   initialize() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('hour_glass');
@@ -49,40 +46,42 @@ class NotificationService {
       Config.notificationChannelId,
       Config.notificationChannelId,
       "this_is_the_only_notification_channel_for_platform_android",
+      importance: Importance.max,
+      priority: Priority.max,
+      ongoing: true,
       icon: 'hour_glass',
-      sound: RawResourceAndroidNotificationSound('la_cucaracha'),
+      playSound: false,
       largeIcon: DrawableResourceAndroidBitmap('hour_glass'),
       enableLights: true,
       color: Colors.black,
       ledColor: Colors.black,
       ledOnMs: 1000,
-      ledOffMs: 500,
-      importance: Importance.max,
-      priority: Priority.max,
-      playSound: true,
-      ongoing: true,
-      styleInformation: DefaultStyleInformation(true, true),
+      ledOffMs: 500
   );
 
   static var platformChannelSpecifics = NotificationDetails(
       android: androidNotificationChannel
   );
 
+  void turnOffPersistentAlarmSound(){
+    FlutterRingtonePlayer.stop();
+  }
+
   static void showNotification({@required int id, @required String title, @required String body}) async {
+    FlutterRingtonePlayer.play(
+      android: AndroidSounds.ringtone,
+      ios: IosSounds.glass,
+      looping: true,
+      volume: .2,
+      asAlarm: true,
+    );
+
     return await flutterLocalNotificationsPlugin.show(
         id,
         title,
         body,
         platformChannelSpecifics,
         payload: title
-    );
-  }
-
-  Future<void> scheduleWorkmanagerPendingNotification(DateTime notificationScheduleDateTime, String task, {Map<String, dynamic> inputData}) async {
-    _backgroundService.schedulePendingTask(
-        notificationScheduleDateTime,
-        task,
-        input: inputData
     );
   }
 
@@ -100,7 +99,14 @@ class NotificationService {
   }
 
   cancelNotification(int id) async {
-    _backgroundService.cancelAll();
     await flutterLocalNotificationsPlugin.cancel(id);
   }
+}
+
+void callbackAndroidAlarmManager() {
+  NotificationService.showNotification(id: Config.alarmNotificationId, title: 'Alarm', body: "Its a fun alarm!");
+}
+
+class BackgroundTask {
+  static const String alarm_notification = "alarmNotification";
 }

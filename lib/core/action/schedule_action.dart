@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fun_alarm/core/configs/configs.dart';
 import 'package:fun_alarm/core/observable/scheduleO.dart';
-import 'package:fun_alarm/core/service/background_service.dart';
 import 'package:fun_alarm/core/service/notification_service.dart';
 import 'package:fun_alarm/core/store/schedule_store.dart';
 import 'package:fun_alarm/core/view/page/createalarm/create_alarm_page.dart';
