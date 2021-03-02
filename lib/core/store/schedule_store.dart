@@ -32,7 +32,7 @@ class ScheduleStore {
   }
 
   Future<ScheduleO> getIncomingSchedule() async {
-    final createdSchedules = await _localStorageService.getListForKey(LocalStorageKeys.schedule);
+    final createdSchedules = await _localStorageService.getList(LocalStorageKeys.schedule);
     var incomingSchedule;
 
     for (final schedule in createdSchedules) {
@@ -54,7 +54,7 @@ class ScheduleStore {
 
   Future<void> _updateObservables() async {
     try {
-      final createdSchedules = await _localStorageService.getListForKey(LocalStorageKeys.schedule);
+      final createdSchedules = await _localStorageService.getList(LocalStorageKeys.schedule);
 
       List<ScheduleO> schedules = [];
       for (final schedule in createdSchedules) {
@@ -63,18 +63,17 @@ class ScheduleStore {
 
       return o$.add(AllScheduleO(schedules));
     } catch (e) {
-      print('updateobservable find error $e');
       return o$.add(AllScheduleO([]));
     }
   }
 
   Future<void> removeSchedule(ScheduleO scheduleO) async {
     var createdSchedules =
-    await _localStorageService.getListForKey(LocalStorageKeys.schedule);
+    await _localStorageService.getList(LocalStorageKeys.schedule);
 
     createdSchedules.removeWhere((e) => e == scheduleO.toString());
 
-    _localStorageService.saveListForKey(LocalStorageKeys.schedule,
+    _localStorageService.saveList(LocalStorageKeys.schedule,
         values: createdSchedules);
 
     return _updateObservables();
@@ -86,12 +85,12 @@ class ScheduleStore {
 
   Future<void> addSchedule(ScheduleO scheduleO) async {
     var createdSchedules =
-        await _localStorageService.getListForKey(LocalStorageKeys.schedule) ??
+        await _localStorageService.getList(LocalStorageKeys.schedule) ??
             [];
 
     createdSchedules.add(scheduleO.toString());
 
-    _localStorageService.saveListForKey(LocalStorageKeys.schedule,
+    _localStorageService.saveList(LocalStorageKeys.schedule,
         values: createdSchedules);
 
     return _updateObservables();
@@ -99,12 +98,12 @@ class ScheduleStore {
 
   Future<void> editSchedule(ScheduleO scheduleO) async {
     var createdSchedules =
-        await _localStorageService.getListForKey(LocalStorageKeys.schedule) ??
+        await _localStorageService.getList(LocalStorageKeys.schedule) ??
             [];
 
     createdSchedules[createdSchedules.indexWhere((element) => scheduleO.id == ScheduleO.fromMap(jsonDecode(element)).id)] = scheduleO.toString();
 
-    _localStorageService.saveListForKey(LocalStorageKeys.schedule,
+    _localStorageService.saveList(LocalStorageKeys.schedule,
         values: createdSchedules);
 
     return _updateObservables();

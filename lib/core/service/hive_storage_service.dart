@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class HiveLocalStorageService extends LocalStorageService {
   Box box;
 
-  final String boxName = 'localBox';
+  final String boxName = 'primaryBox';
 
   PublishSubject<LocalStorageUpdate> localStorageUpdate$;
 
@@ -21,22 +21,18 @@ class HiveLocalStorageService extends LocalStorageService {
   }
 
   @override
-  Future<List<String>> getListForKey(String key) async {
+  Future<List<String>> getList(String key) async {
     return await box.get(key);
   }
 
   @override
-  Future<String> getValueForKey(String key) async {
+  Future<String> getValue(String key) async {
     var value = box.get(key);
-    if (value is String) {
-      return value;
-    } else {
-      throw "Value is of wrong type";
-    }
+    return value;
   }
 
   @override
-  Future<void> removeValueForKey(String key) async {
+  Future<void> removeValue(String key) async {
     return await box.delete(key);
   }
 
@@ -46,12 +42,12 @@ class HiveLocalStorageService extends LocalStorageService {
   }
 
   @override
-  Future<void> saveListForKey(String key, {List<String> values}) async {
+  Future<void> saveList(String key, {List<String> values}) async {
     return await box.put(key, values);
   }
 
   @override
-  Future<void> saveValueForKey(String key, {String value}) async {
+  Future<void> saveValue(String key, {String value}) async {
     return await box.put(key, value);
   }
 
@@ -63,24 +59,5 @@ class HiveLocalStorageService extends LocalStorageService {
   @override
   Future<void> notifyUpdateForKey(LocalStorageUpdate key) async {
     localStorageUpdate$.add(key);
-    @override
-    Future<void> removeValueForKey(String key) async {
-      return await box.delete(key);
-    }
-
-    @override
-    Future<void> resetAll() async {
-      return await box.clear();
-    }
-
-    @override
-    Future<void> saveListForKey(String key, {List<String> values}) async {
-      return await box.put(key, values);
-    }
-
-    @override
-    Future<void> saveValueForKey(String key, {String value}) async {
-      return await box.put(key, value);
-    }
   }
 }
